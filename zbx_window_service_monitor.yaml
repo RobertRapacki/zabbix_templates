@@ -1,0 +1,68 @@
+zabbix_export:
+  version: '7.0'
+  template_groups:
+    - uuid: a571c0d144b14fd4a87a9d9b2aa9fcd6
+      name: Templates/Applications
+  templates:
+    - uuid: 039d4eb90e21416d84dfdd57a309547b
+      template: 'Windows Service Monitor by SNMP'
+      name: 'Windows Service Monitor by SNMP'
+      description: |
+        Custome template create to discover all services on a Windows host, and filter them based on the {$WINDOWS.SERVICES.MONITORED} macro value.
+        
+        RR 10/9/2024
+      groups:
+        - name: Templates/Applications
+      discovery_rules:
+        - uuid: 7c83e8cce48b468d9749ec2e41ed56cb
+          name: 'Service Discovery'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#SNMPVALUE},.1.3.6.1.4.1.77.1.2.3.1.1]'
+          key: windows.services
+          filter:
+            conditions:
+              - macro: '{#SNMPVALUE}'
+                value: '{$WINDOWS.SERVICES.MONITORED}'
+                formulaid: A
+          lifetime_type: DELETE_NEVER
+          lifetime: '0'
+          enabled_lifetime_type: DISABLE_NEVER
+          description: 'Old value of SNMP OID:'
+          item_prototypes:
+            - uuid: 4962352f59e644fa993533436c0b7d81
+              name: 'Service Status - {#SNMPVALUE}'
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.77.1.2.3.1.3.{#SNMPINDEX}'
+              key: '1.3.6.1.4.1.77.1.2.3.1.3[{#SNMPINDEX}]'
+              history: 36d
+              tags:
+                - tag: component
+                  value: 'windows service'
+              trigger_prototypes:
+                - uuid: 3ad8b53bb14940909231d9bf22406d72
+                  expression: 'nodata(/Windows Service Monitor by SNMP/1.3.6.1.4.1.77.1.2.3.1.3[{#SNMPINDEX}],1m)=1'
+                  name: 'Windows service {#SNMPVALUE} down'
+                  priority: HIGH
+          graph_prototypes:
+            - uuid: 44bb47a0881a4123bc71bab26d20185a
+              name: 'Windows Service Graph'
+              show_triggers: 'NO'
+              type: STACKED
+              show_legend: 'NO'
+              ymin_type_1: FIXED
+              graph_items:
+                - drawtype: FILLED_REGION
+                  color: 1A7C11
+                  calc_fnc: MIN
+                  item:
+                    host: 'Windows Service Monitor by SNMP'
+                    key: '1.3.6.1.4.1.77.1.2.3.1.3[{#SNMPINDEX}]'
+      tags:
+        - tag: class
+          value: os
+        - tag: target
+          value: windows
+      macros:
+        - macro: '{$WINDOWS.SERVICES.MONITORED}'
+          value: '^(DHCP Server|NinjaRMMAgent)$'
+          description: 'Case-sensitive list of services to be monitored'
