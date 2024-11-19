@@ -8,9 +8,9 @@ zabbix_export:
       template: 'Windows Service Monitor by SNMP'
       name: 'Windows Service Monitor by SNMP'
       description: |
-        Custome template create to discover all services on a Windows host, and filter them based on the {$WINDOWS.SERVICES.MONITORED} macro value.
-        
-        RR 10/9/2024
+        Custom template create to discover all services on a Windows host, and filter them based on the {$WINDOWS.SERVICES.MONITORED} macro value.
+        The format of the macro value is as follows: ^(Full Service Name|Second Full Service Name|Etc)$
+        Note that there are no spaces between the pipes and the service names.
       groups:
         - name: Templates/Applications
       discovery_rules:
