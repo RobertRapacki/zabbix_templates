@@ -1,4 +1,4 @@
-# Zabbix custom template create to discover all services on a Windows host,
+# Zabbix custom template o discover all services on a Windows host,
 # and filter them based on the {$WINDOWS.SERVICES.MONITORED} macro value.
 # 
 # Copyright (C) 2024  Robert Stanley Rapacki
