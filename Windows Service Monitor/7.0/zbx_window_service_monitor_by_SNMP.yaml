@@ -2,6 +2,7 @@
 # and filter them based on the {$WINDOWS.SERVICES.MONITORED} macro value.
 # 
 # Copyright (C) 2024  Robert Stanley Rapacki
+# Email: foss@robertrapacki.tech
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
