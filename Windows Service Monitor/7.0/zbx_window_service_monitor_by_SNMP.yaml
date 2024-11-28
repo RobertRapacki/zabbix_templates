@@ -83,5 +83,5 @@ zabbix_export:
           value: windows
       macros:
         - macro: '{$WINDOWS.SERVICES.MONITORED}'
-          value: '^(DHCP Server|NinjaRMMAgent)$'
+          value: '^()$'
           description: 'Case-sensitive list of services to be monitored'
